@@ -9,13 +9,13 @@ app.secret_key = b'\xa3P\x05\x1a\xf8\xc6\xff\xa4!\xd2\xb5\n\x96\x05\xed\xc3\xc90
 
 @app.route("/")
 def home():
-    return "你好China！"
-    
+    return("登录试试看！")
 @app.route("/reg", methods=["GET", "POST"])
 def reg_handle():
     if request.method == "GET":
         return render_template("reg.html")
     elif request.method == "POST":
+        
         uname = request.form.get("uname")
         upass = request.form.get("upass")
         upass2 = request.form.get("upass2")
@@ -24,7 +24,7 @@ def reg_handle():
         email = request.form.get("email")
 
         if not (uname and uname.strip() and upass and upass2 and phone and verify_code and email):
-            abort(500)
+            return render_template("404.html")
 
         # if re.search(r"[\u4E00-\u9FFF]", uname):
         #     abort(Response("用户名含有中文汉字！"))
@@ -41,7 +41,7 @@ def reg_handle():
 
         # 密码长度介于6-15
         if not (len(upass) >= 6 and len(upass) <= 15 and upass == upass2):
-            abort(Response("密码错误！"))
+            abort(Response("密码错误！再试一次吧！"))
 
         if not re.fullmatch(r"[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+", email):
             abort(Response("邮箱格式错误！"))
@@ -64,7 +64,6 @@ def login_handle():
     elif request.method == "POST":
         uname = request.form.get("uname")
         upass = request.form.get("upass")
-
         print(uname, upass)
 
         if not (uname and uname.strip() and upass and upass.strip()):
@@ -108,13 +107,19 @@ def login_handle():
                 print(e)
             
             print("登录成功！", session)
-            # return redirect(url_for("user_center"))
-            return ("成功！")
+            return redirect(url_for("user_center"))
         else:
             # 登录失败
             print("登录失败！")
             return render_template("login.html", login_fail=1)
 
+@app.route("/user_center")
+def user_center():
+    if session:
+        print(session)
+        return render_template("user_center.html")
+    else:
+        return render_template("login.html")
 
 if __name__ == "__main__":
     app.run(port=80, debug=True)
