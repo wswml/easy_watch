@@ -9,7 +9,7 @@ app.secret_key = b'\xa3P\x05\x1a\xf8\xc6\xff\xa4!\xd2\xb5\n\x96\x05\xed\xc3\xc90
 
 @app.route("/")
 def home():
-    return("登录试试看！")
+    return render_template("index.html")
 
 
 @app.route("/reg", methods=["GET", "POST"])
@@ -69,14 +69,14 @@ def login_handle():
         print(uname, upass)
 
         if not (uname and uname.strip() and upass and upass.strip()):
-            abort(Response("登录失败！"))
+            return render_template("login.html", login_fail=1)
 
         if not re.fullmatch("[a-zA-Z0-9_]{4,20}", uname):
-            abort(Response("用户名不合法！"))
+            return render_template("login.html", login_fail=1)
 
         # 密码长度介于6-15
         if not (len(upass) >= 6 and len(upass) <= 15):
-            abort(Response("密码不合法！"))    
+            return render_template("login.html", login_fail=1)
         
         cur = db.cursor()
         cur.execute("SELECT * FROM ez_user WHERE uname=%s AND upass=MD5(%s)", (uname, uname + upass))
@@ -86,8 +86,7 @@ def login_handle():
         if res:
             # 登录成功就跳转到用户个人中心
             cur_login_time = datetime.datetime.now()
-
-            session["user_info"] = {
+            session["user_info"]= {
                 "uid": res[0],
                 "uname": res[1],
                 "upass": res[2],
@@ -122,14 +121,15 @@ def login_handle():
 def user_center():
     if session:
         uinfo = session.get("user_info")
-        uname = uinfo.get("uname")
-        phone = uinfo.get("phone")
-        email = uinfo.get("email")
-        reg_time = uinfo.get("reg_time")
-
-        return render_template("user_center.html",u=uname, p=phone, e=email, r=reg_time)
+        try:
+            uname = uinfo.get("uname")
+            phone = uinfo.get("phone")
+            email = uinfo.get("email")
+            reg_time = uinfo.get("reg_time")
+            return render_template("user_center.html",u=uname, p=phone, e=email, r=reg_time)
+        except:
+            return redirect("/login")
     else:
-
         return redirect("/login")
 
 
