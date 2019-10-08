@@ -28,7 +28,7 @@
 						<ul class="message-l">
 							<div class="topMessage">
 								<div class="menu-hd">
-									<p>欢迎回来！</p>
+									<p>{{ u }},欢迎你！<a href="/logout">点我注销</a></p>
 								</div>
 							</div>
 						</ul>
@@ -43,16 +43,37 @@
 		</header>
 		<div class="center">
 			<div class="col-main">
-				<div class="main-wrap"></div>
+				<div align="center"><table width="911" height="251" border="1" align="center" cellspacing="10" bordercolor="#1A1A1A" bgcolor="#FFFFFF">
+					<caption class="admin-header">
+					  用户信息
+					  <br>
+					  <br>
+					  <br>
+					</caption>
+					<tr>
+					  <td width="152" bordercolor="#333333" class="admin-task-bd"><p class="am-text-lg am-text-lg STYLE1">用户名：</p>      </td>
+					  <td width="189" bordercolor="#000000">{{ u }}</td>
+					</tr>
+					<tr>
+					  <td bordercolor="#333333" class="admin-task-bd am-text-lg am-text-lg STYLE1">电话：</td>
+					  <td bordercolor="#000000">{{ p }}</td>
+					</tr>
+					<tr>
+					  <td bordercolor="#333333" class="admin-task-bd am-text-lg am-text-lg STYLE1">邮箱：</td>
+					  <td bordercolor="#000000">{{ e }}</td>
+					</tr>
+					<tr>
+					  <td bordercolor="#333333" class="admin-task-bd am-text-lg am-text-lg STYLE1">注册时间：</td>
+					  <td bordercolor="#000000">{{ r }}</td>
+					</tr>
+				  </table>
+				  </div>
 			</div>
 
 			<aside class="menu">
 				<ul>
 					<li class="person">
-						<a href="index.html">个人中心</a>
-					</li>
-					<li class="person">
-						<a href="#">个人资料</a>
+						<a href="/">回到主页</a>
 					</li>
 				</ul>
 

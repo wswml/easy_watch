@@ -12,25 +12,21 @@
 
 		<link rel="stylesheet" href="../static/css/amazeui.css" />
 		<link href="../static/css/dlstyle.css" rel="stylesheet" type="text/css">
-	</head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head>
 
-	<body>
+	<body tracingsrc="../static/images/big.jpg" tracingopacity="100">
         {% if login_fail %}
         <script>
             alert("用户名或密码错误，请重新登录！");
         </script>
         {% endif %}
         
-		<div class="login-boxtitle">
-			<a href="home.html"><img alt="logo" src="../images/logobig.png" /></a>
-		</div>
-
 		<div class="login-banner">
 			<div class="login-main">
-				<div class="login-banner-bg"><span></span><img src="../images/big.jpg" /></div>
+				<div class="login-banner-bg"><span></span><img src="../static/images/big.jpg" /></div>
 				<div class="login-box">
 
-							<h3 class="title">登录商城</h3>
+							<h3 class="title">登录Easy-Watch</h3>
 
 							<div class="clear"></div>
 						
@@ -60,5 +56,6 @@
 			</div>
 		</div>
 					</div>
-	</body>
+                    <div align="right"></div>
+</body>
 </html>

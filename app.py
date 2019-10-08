@@ -10,6 +10,8 @@ app.secret_key = b'\xa3P\x05\x1a\xf8\xc6\xff\xa4!\xd2\xb5\n\x96\x05\xed\xc3\xc90
 @app.route("/")
 def home():
     return("登录试试看！")
+
+
 @app.route("/reg", methods=["GET", "POST"])
 def reg_handle():
     if request.method == "GET":
@@ -20,10 +22,9 @@ def reg_handle():
         upass = request.form.get("upass")
         upass2 = request.form.get("upass2")
         phone = request.form.get("phone")
-        verify_code = request.form.get("verify_code")
         email = request.form.get("email")
 
-        if not (uname and uname.strip() and upass and upass2 and phone and verify_code and email):
+        if not (uname and uname.strip() and upass and upass2 and phone and email):
             return render_template("404.html")
 
         # if re.search(r"[\u4E00-\u9FFF]", uname):
@@ -55,7 +56,8 @@ def reg_handle():
             abort(Response("用户注册失败！"))
 
         # 注册成功就跳转到登录页面
-        return "注册成功啦"
+        return redirect("/login")
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login_handle():
@@ -107,19 +109,39 @@ def login_handle():
                 print(e)
             
             print("登录成功！", session)
+
             return redirect(url_for("user_center"))
         else:
             # 登录失败
             print("登录失败！")
+
             return render_template("login.html", login_fail=1)
+
 
 @app.route("/user_center")
 def user_center():
     if session:
-        print(session)
-        return render_template("user_center.html")
+        uinfo = session.get("user_info")
+        uname = uinfo.get("uname")
+        phone = uinfo.get("phone")
+        email = uinfo.get("email")
+        reg_time = uinfo.get("reg_time")
+
+        return render_template("user_center.html",u=uname, p=phone, e=email, r=reg_time)
     else:
-        return render_template("login.html")
+
+        return redirect("/login")
+
+
+@app.route("/logout")
+def logout_handle():
+    res = {"err": 1, "desc": "未登录！"}
+    if session.get("user_info"):
+        session.pop("user_info")
+        res["err"] = 0
+        res["desc"] = "注销成功！"
+    
+    return redirect(url_for("home"))
 
 if __name__ == "__main__":
     app.run(port=80, debug=True)
